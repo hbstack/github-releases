@@ -10,7 +10,8 @@
     {{- end }}
     <description>{{ default .Summary .Description }}</description>
     {{- $releases := partialCached "hb/modules/github-releases/functions/releases" . }}
-    {{- range $releases }}
+    {{- $limit := default 100 site.Params.hb.github_releases.limit }}
+    {{- range first $limit $releases }}
       <item>
         <title>{{ .path }}</title>
         <link>{{ .url }}</link>

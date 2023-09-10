@@ -12,8 +12,9 @@
     </p>
   {{- end }}
   {{- $releases := partialCached "hb/modules/github-releases/functions/releases" . }}
+  {{- $limit := default 100 site.Params.hb.github_releases.limit }}
   <div class="hb-releases">
-    {{- range sort $releases "date" "desc" }}
+    {{- range first $limit $releases }}
       <div class="hb-release col card mb-4">
         <div class="card-header">
           <a

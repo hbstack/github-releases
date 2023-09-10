@@ -25,4 +25,4 @@
     {{- end }}
   {{- end }}
 {{- end }}
-{{- return $releases }}
+{{- return sort $releases "date" "desc" }}
