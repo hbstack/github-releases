@@ -1,0 +1,28 @@
+{{- $releases := slice }}
+{{- $opts := dict "Authorization" (getenv "GITHUB_TOKEN" | printf "Bearer %s") }}
+{{- $repos := slice }}
+{{- with index site.Data "github-repositories" }}
+  {{- $repos = . }}
+{{- end }}
+{{- range $repos }}
+  {{- $name := .name }}
+  {{- $api := printf
+    "https://api.github.com/repos/%s/releases?per_page=100"
+    $name
+  }}
+  {{- with getJSON $api $opts }}
+    {{- range . }}
+      {{- $path := printf "%s/%s/%s" "github.com" $name .tag_name }}
+      {{- $path = replaceRE `/?v(\d+\.\d+\.\d+)` "@v$1" $path }}
+      {{- $releases = $releases | append (dict
+        "version" .tag_name
+        "name" $name
+        "path" $path
+        "body" .body
+        "date" (.published_at | time)
+        "url" .html_url)
+      }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- return $releases }}

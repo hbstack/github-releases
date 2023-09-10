@@ -1,0 +1,23 @@
+{{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>{{ .Title }}</title>
+    <link>{{ .Permalink }}</link>
+    {{- with .OutputFormats.Get "rss" }}
+      <atom:link
+        href="{{ .Permalink }}"
+        rel="self" type="application/rss+xml" />
+    {{- end }}
+    <description>{{ default .Summary .Description }}</description>
+    {{- $releases := partialCached "hb/modules/github-releases/functions/releases" . }}
+    {{- range $releases }}
+      <item>
+        <title>{{ .path }}</title>
+        <link>{{ .url }}</link>
+        <pubDate>{{ .date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
+        <guid>{{ .url }}</guid>
+        <description>{{ .body | markdownify | plainify | htmlEscape }}</description>
+      </item>
+    {{- end }}
+  </channel>
+</rss>

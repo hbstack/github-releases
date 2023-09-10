@@ -1,0 +1,35 @@
+{{ define "main" }}
+  <h1 class="display-1 text-center mb-3">{{ .Title }}</h1>
+  <p class="lead text-center mb-3">{{ .Description }}</p>
+  {{- with .OutputFormats.Get "rss" }}
+    <p class="text-center">
+      <a
+        class="btn btn-primary btn-lg mb-3"
+        href="{{ .Permalink }}"
+        target="_blank">
+        Subscribe RSS feeds
+      </a>
+    </p>
+  {{- end }}
+  {{- $releases := partialCached "hb/modules/github-releases/functions/releases" . }}
+  <div class="hb-releases">
+    {{- range sort $releases "date" "desc" }}
+      <div class="hb-release col card mb-4">
+        <div class="card-header">
+          <a
+            class="text-decoration-none text-body"
+            href="{{ .url }}"
+            target="_blank">
+            <h1 class="h4 mb-0">{{ .path }}</h1>
+          </a>
+        </div>
+        <div class="card-body pb-0 text-body-secondary">
+          {{ .body | markdownify }}
+        </div>
+        <div class="card-footer text-body-secondary">
+          Published at {{ printf "%s %s" (.date | time.Format ":date_full") (.date | time.Format ":time_full") }}.
+        </div>
+      </div>
+    {{- end }}
+  </div>
+{{ end }}
