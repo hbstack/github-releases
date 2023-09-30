@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.0](https://github.com/hbstack/github-releases/compare/v0.1.1...v0.2.0) (2023-09-30)
+
+
+### Features ✨
+
+* add the disable parameter ([#7](https://github.com/hbstack/github-releases/issues/7)) ([bfab308](https://github.com/hbstack/github-releases/commit/bfab308226aa9b9fa377a8b42d885aee0c3d46b4))
+* check the GITHUB_TOKEN environment variable ([#9](https://github.com/hbstack/github-releases/issues/9)) ([5c09f16](https://github.com/hbstack/github-releases/commit/5c09f16123d0f86ca3f7bfe52baf7e6803bac8d8))
+* display progress messages ([9ac59e3](https://github.com/hbstack/github-releases/commit/9ac59e34298013b47cde9cbbfbaa30f291e93d32))
+
 ## [0.1.1](https://github.com/hbstack/github-releases/compare/v0.1.0...v0.1.1) (2023-09-10)
 
 
