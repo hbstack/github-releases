@@ -1,5 +1,4 @@
 {{- $releases := slice }}
-{{- $opts := dict "Authorization" (getenv "GITHUB_TOKEN" | printf "Bearer %s") }}
 {{- $repos := slice }}
 {{- $disable := default (cond hugo.IsProduction false true) site.Params.hb.github_releases.disable }}
 {{- if not $disable }}
@@ -9,13 +8,21 @@
 {{- else }}
   {{- warnf "[github-release] GitHub releases was disabled." }}
 {{- end }}
+{{- $opts := newScratch }}
+{{- with getenv "GITHUB_TOKEN" }}
+  {{- $opts.Set "Authorization" (printf "Bearer %s" .) }}
+{{- else }}
+  {{- if not $disable }}
+    {{- warnf "[github-releases] GITHUB_TOKEN environment variable is missing, you may encounter the rate limit issue." }}
+  {{- end }}
+{{- end }}
 {{- range $repos }}
   {{- $name := .name }}
   {{- $api := printf
     "https://api.github.com/repos/%s/releases?per_page=100"
     $name
   }}
-  {{- with getJSON $api $opts }}
+  {{- with getJSON $api $opts.Values }}
     {{- range . }}
       {{- $path := printf "%s/%s/%s" "github.com" $name .tag_name }}
       {{- $path = replaceRE `/?v(\d+\.\d+\.\d+)` "@v$1" $path }}
