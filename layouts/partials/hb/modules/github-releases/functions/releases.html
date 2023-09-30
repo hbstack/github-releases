@@ -1,8 +1,13 @@
 {{- $releases := slice }}
 {{- $opts := dict "Authorization" (getenv "GITHUB_TOKEN" | printf "Bearer %s") }}
 {{- $repos := slice }}
-{{- with index site.Data "github-repositories" }}
-  {{- $repos = . }}
+{{- $disable := default (cond hugo.IsProduction false true) site.Params.hb.github_releases.disable }}
+{{- if not $disable }}
+  {{- with index site.Data "github-repositories" }}
+    {{- $repos = . }}
+  {{- end }}
+{{- else }}
+  {{- warnf "[github-release] GitHub releases was disabled." }}
 {{- end }}
 {{- range $repos }}
   {{- $name := .name }}
