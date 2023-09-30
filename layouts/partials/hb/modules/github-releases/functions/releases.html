@@ -22,6 +22,7 @@
     "https://api.github.com/repos/%s/releases?per_page=100"
     $name
   }}
+  {{- warnf "[github-releases] fetching releases of %s." $name }}
   {{- with getJSON $api $opts.Values }}
     {{- range . }}
       {{- $path := printf "%s/%s/%s" "github.com" $name .tag_name }}
